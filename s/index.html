@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Our Story</title>
+<meta property="og:title" content="فيه حاجة مستنياكي">
+<meta property="og:description" content="افتحيها لما تبقي لوحدك.">
+<link rel="icon" href="../assets/favicon-64.png" type="image/png">
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=zodiak@400,700,401&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/fonts.css?v=9">
+<link rel="stylesheet" href="../assets/story.css?v=9">
+</head>
+<body>
+<div class="os" id="root"><div class="empty">…</div></div>
+<script src="../assets/config.js?v=9"></script>
+<script src="../assets/api.js?v=9"></script>
+<script src="../assets/render.js?v=9"></script>
+<script>
+(function () {
+  var R = window.OS_RENDER, API = window.OS_API, root = document.getElementById('root');
+  var q = new URLSearchParams(location.search);
+  var opts = { resolve: API.mediaUrl };
+
+  function show(data, plan) { opts.plan = plan; R.mount(root, data, opts); }
+
+  /* 1) معاينة جوه البيلدر: البيانات بتيجي بـpostMessage */
+  if (q.get('embed')) {
+    opts.preview = true; document.body.classList.add('embed');
+    var lastKey = '';
+    addEventListener('message', function (e) {
+      if (e.origin !== location.origin || !e.data || e.data.type !== 'os:data') return;
+      var key = JSON.stringify(e.data.data) + e.data.plan;
+      if (key === lastKey) return; lastKey = key;
+      var y = scrollY;
+      R.mount(root, e.data.data, Object.assign({}, opts, { plan: e.data.plan }));
+      if (e.data.keepScroll) scrollTo(0, y);
+      if (e.data.jump) { var el = root.querySelector(e.data.jump); if (el) el.scrollIntoView(); }
+    });
+    parent.postMessage({ type: 'os:ready' }, location.origin);
+    return;
+  }
+
+  /* 2) ديمو صفحة البيع */
+  if (q.get('demo')) {
+    show(R.DEMO, 'story');
+    /* ?shot=letter → قسم واحد بس، ظاهر على طول (للقطات صفحة البيع) */
+    var shot = q.get('shot');
+    if (shot) {
+      document.body.classList.add('shot');
+      root.querySelectorAll('[data-s]').forEach(function (el) { if (el.getAttribute('data-s') !== shot) el.remove(); });
+      root.querySelectorAll('.foot,.pv').forEach(function (el) { el.remove(); });
+      root.querySelectorAll('.rv,.paperl p,.phone,.t').forEach(function (el) { el.classList.add('in'); });
+    }
+    return;
+  }
+
+  /* 3) صفحة العميل الحقيقية */
+  var slug = q.get('s') || location.hash.slice(1);
+  if (!slug) { root.innerHTML = '<div class="empty">اللينك ناقص</div>'; return; }
+  API.getPublic(slug).then(function (r) {
+    if (!r) { root.innerHTML = '<div class="empty">الصفحة دي مش موجودة أو لسه ما اتفعّلتش</div>'; return; }
+    if (r.locked) { R.locked(root, r); return; }
+    if (r.secret) {
+      R.secretGate(root, r, function (h) {
+        return API.getPublic(slug, h).then(function (r2) {
+          if (!r2 || r2.secret || !r2.data) return false;
+          document.title = 'Our Story — ' + (r2.data.herEn || r2.data.her || '');
+          show(r2.data, r2.plan); scrollTo(0, 0); return true;
+        });
+      });
+      return;
+    }
+    document.title = 'Our Story — ' + (r.data.herEn || r.data.her || '');
+    show(r.data, r.plan);
+  }).catch(function () { root.innerHTML = '<div class="empty">حصلت مشكلة في التحميل. جرّبي تاني كمان شوية</div>'; });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>دفع تجريبي — Our Story</title>
+<link rel="icon" href="../assets/favicon-64.png" type="image/png">
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=zodiak@400,700,401&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/fonts.css?v=9">
+<style>
+:root{--bg:#EEF0F3;--ink:#1E2430;--soft:#667085;--line:#D9DEE6;--acc:#2D5BD3}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'Estedad',system-ui,sans-serif;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px}
+.box{background:#fff;border-radius:20px;max-width:420px;width:100%;padding:22px;box-shadow:0 10px 30px rgba(0,0,0,.06)}
+.demo{background:#FFF4D6;border:1px solid #F1D98C;color:#6B5200;border-radius:12px;padding:10px 12px;font-size:13px;margin-bottom:16px;line-height:1.6}
+h1{font-size:18px;margin-bottom:4px}
+.amt{font-size:32px;font-weight:700;margin:6px 0 16px}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.tabs button{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:10px;font:inherit;font-size:14px;cursor:pointer}
+.tabs button.on{border-color:var(--acc);color:var(--acc);font-weight:600}
+label{display:block;font-size:13px;color:var(--soft);margin:10px 0 4px}
+input{width:100%;padding:12px;border:1.5px solid var(--line);border-radius:12px;font:inherit;font-size:15px;direction:ltr;text-align:left;background:#F8F9FB}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.go{width:100%;margin-top:18px;border:0;background:var(--acc);color:#fff;border-radius:14px;padding:15px;font:inherit;font-size:16px;font-weight:700;cursor:pointer}
+.go:disabled{opacity:.6}
+.back{display:block;text-align:center;margin-top:12px;font-size:13px;color:var(--soft)}
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="demo"><b>تجربة.</b> مفيش فلوس بتتدفع. في النسخة الحقيقية هنا بتفتح صفحة Paymob.</div>
+  <h1 id="ttl">Our Story</h1>
+  <div class="amt" id="amt">—</div>
+  <div class="tabs"><button class="on" data-t="card">كارت</button><button data-t="wallet">محفظة موبايل</button></div>
+  <div id="card"><label>رقم الكارت (تجربة)</label><input value="4242 4242 4242 4242" readonly><div class="r2"><div><label>MM/YY</label><input value="12/30" readonly></div><div><label>CVV</label><input value="123" readonly></div></div></div>
+  <div id="wallet" hidden><label>رقم المحفظة (تجربة)</label><input value="010 0000 0000" readonly></div>
+  <button class="go" id="go">ادفع (تجربة)</button>
+  <a class="back" href="../start/">رجوع للتعديل</a>
+</div>
+<script src="../assets/config.js?v=9"></script>
+<script src="../assets/api.js?v=9"></script>
+<script>
+(function () {
+  var API = OS_API, CFG = OS_CONFIG, id = new URLSearchParams(location.search).get('id');
+  if (API.live || !API.demoPay) { document.body.innerHTML = '<p style="padding:40px">الصفحة دي للتجربة بس.</p>'; return; }
+  API.demoInfo(id).then(function (r) {
+    if (!r) { document.getElementById('amt').textContent = 'الطلب مش موجود'; document.getElementById('go').disabled = true; return; }
+    document.getElementById('ttl').textContent = CFG.plans[r.plan].ar + ' — هدية لـ' + (r.her || '');
+    document.getElementById('amt').textContent = r.amount + ' ' + CFG.currency;
+  });
+  document.querySelectorAll('.tabs button').forEach(function (b) {
+    b.onclick = function () {
+      document.querySelectorAll('.tabs button').forEach(function (x) { x.classList.toggle('on', x === b); });
+      document.getElementById('card').hidden = b.dataset.t !== 'card'; document.getElementById('wallet').hidden = b.dataset.t !== 'wallet';
+    };
+  });
+  document.getElementById('go').onclick = function () {
+    var g = this; g.disabled = true; g.textContent = 'جاري الدفع…';
+    setTimeout(function () { API.demoPay(id).then(function () { location.href = '../done/?id=' + encodeURIComponent(id); }); }, 1100);
+  };
+})();
+</script>
+</body>
+</html>

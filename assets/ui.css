@@ -1,0 +1,90 @@
+/* Our Story: الزراير والحركة (مشترك بين كل الصفحات) */
+:root{
+  --os-paper:#F7F2EA;--os-rose:#BD5265;--os-rose-d:#9E4053;--os-ink:#302622;--os-ink-2:#4A3B35;--os-blush:#EBD6D2;--os-taupe:#8C7C72;--os-line:#E2D6C8;
+  --e-out:cubic-bezier(.22,1,.36,1);--e-io:cubic-bezier(.65,0,.35,1);--e-spring:cubic-bezier(.34,1.5,.64,1)
+}
+
+/* ملمس ورق خفيف فوق الصفحة */
+.grain::after{content:"";position:fixed;inset:0;z-index:95;pointer-events:none;opacity:.07;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .19 0 0 0 0 .15 0 0 0 0 .13 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* شريط التقدم في السكرول */
+.sp{position:fixed;top:0;right:0;left:0;height:2px;background:var(--os-rose);transform-origin:right;transform:scaleX(var(--p,0));z-index:96;pointer-events:none}
+
+/* لمس أسرع على الموبايل ومن غير الوميض الأزرق */
+a,button,label,summary,input,select,textarea{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+@media(hover:none){.grain::after{mix-blend-mode:normal;opacity:.045}}
+
+/* ---------- الزراير ---------- */
+.btn{--bg:var(--os-rose);--fg:#fff;--fill:var(--os-ink);--ring:rgba(189,82,101,.35);
+  position:relative;isolation:isolate;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:14px;
+  min-height:56px;padding:0 12px 0 28px;border:0;border-radius:16px 16px 16px 5px;
+  background:var(--bg);color:var(--fg);font:inherit;font-weight:700;font-size:16px;line-height:1.2;text-decoration:none;white-space:nowrap;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 14px 28px -18px rgba(48,38,34,.75);
+  transform:translate(var(--mx,0),var(--my,0)) scale(var(--s,1));
+  transition:transform .55s var(--e-out),box-shadow .5s var(--e-out),color .35s,background-color .35s}
+.btn::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--fill);transform:scaleX(0);transform-origin:left center;transition:transform .6s var(--e-out)}
+.btn::after{content:"";flex:none;width:34px;height:34px;border-radius:12px 12px 12px 4px;background:rgba(255,255,255,.17) var(--arr-w) 9px center/16px no-repeat;transition:background-color .4s,transform .55s var(--e-out)}
+.btn{--arr-w:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 12H5M11 18l-6-6 6-6'/%3E%3C/svg%3E")}
+.btn.na{padding:0 28px}.btn.na::after{display:none}
+@media(hover:hover){
+  .btn:hover::before{transform:scaleX(1);transform-origin:right center}
+  .btn:hover::after{animation:osArr .7s var(--e-out);background-color:rgba(255,255,255,.24)}
+  .btn:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 22px 34px -20px rgba(48,38,34,.8)}
+}
+.btn:active{--s:.965;transition-duration:.15s}
+.btn:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring)}
+.btn[disabled]{opacity:.55;cursor:default}
+.btn[disabled]::before{display:none}
+@keyframes osArr{0%{background-position:9px center}45%{background-position:-20px center}46%{background-position:36px center}100%{background-position:9px center}}
+
+.btn.ink{--bg:var(--os-ink);--fill:var(--os-rose);--ring:rgba(48,38,34,.25)}
+.btn.paper{--bg:#FFFDF8;--fg:var(--os-ink);--fill:var(--os-ink);box-shadow:inset 0 0 0 1.5px var(--os-ink)}
+.btn.paper{--arr-w:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23302622' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 12H5M11 18l-6-6 6-6'/%3E%3C/svg%3E")}
+.btn.paper::after{background-color:rgba(48,38,34,.07)}
+@media(hover:hover){.btn.paper:hover{--fg:#fff;--arr-w:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 12H5M11 18l-6-6 6-6'/%3E%3C/svg%3E")}.btn.paper:hover::after{background-color:rgba(255,255,255,.15)}}
+.btn.sm{min-height:44px;font-size:14.5px;padding:0 8px 0 18px;gap:10px;border-radius:12px 12px 12px 4px}
+.btn.sm::after{width:28px;height:28px;border-radius:9px 9px 9px 3px;background-size:14px;background-position:7px center}
+.btn.sm.na{padding:0 18px}
+.btn.block{width:100%}
+.btn[hidden]{display:none}
+
+/* تموّج الضغطة */
+.rp{position:absolute;border-radius:50%;background:currentColor;opacity:.28;transform:scale(0);pointer-events:none;animation:osRp .7s var(--e-out) forwards;z-index:0}
+@keyframes osRp{to{transform:scale(1);opacity:0}}
+
+/* لينك بخط بيترسم */
+.ul{text-decoration:none;background:linear-gradient(currentColor,currentColor) 0 100%/0 1.5px no-repeat;transition:background-size .5s var(--e-out);padding-bottom:2px}
+.ul:hover,.ul.on{background-size:100% 1.5px;background-position:100% 100%}
+
+/* ---------- الظهور ---------- */
+.js [data-rv]{opacity:0;transform:translateY(34px);transition:opacity 1s var(--e-out),transform 1.2s var(--e-out);transition-delay:var(--d,0s)}
+.js [data-rv="fade"]{transform:none}
+.js [data-rv="left"]{transform:translateX(-40px)}
+.js [data-rv="right"]{transform:translateX(40px)}
+.js [data-rv="pop"]{transform:translateY(18px) scale(.94)}
+.js [data-rv].vis{opacity:1;transform:none}
+/* صورة بتتكشف من تحت لفوق */
+.frame{position:relative;overflow:hidden}
+.frame img{width:100%;height:100%;object-fit:cover}
+/* القص على الصورة نفسها، لأن كروم ما بيعتبرش العنصر المقصوص كله ظاهر */
+.js .frame[data-rv="clip"]{opacity:1;transform:none}
+.js .frame[data-rv="clip"] img{clip-path:inset(100% 0 0 0);scale:1.18;transition:clip-path 1.4s var(--e-io),scale 2s var(--e-out);transition-delay:var(--d,0s)}
+.js .frame[data-rv="clip"].vis img{clip-path:inset(0 0 0 0);scale:1}
+
+/* كلام بيطلع كلمة كلمة */
+.sw-w{display:inline-block;overflow:hidden;vertical-align:top;padding:.14em 0 .22em;margin:-.14em 0 -.22em}
+.sw-w>span{display:inline-block}
+.js [data-split] .sw-w>span{transform:translateY(115%);transition:transform 1.1s var(--e-out);transition-delay:calc(var(--i,0) * 55ms + var(--d,0s))}
+.js [data-split].vis .sw-w>span{transform:none}
+
+/* خط بيترسم */
+.js [data-line]{transform:scaleX(0);transform-origin:right;transition:transform 1.2s var(--e-io);transition-delay:var(--d,0s)}
+.js [data-line].vis{transform:scaleX(1)}
+
+@media(prefers-reduced-motion:reduce){
+  .js [data-rv],.js [data-split] .sw-w>span,.js [data-line]{opacity:1!important;transform:none!important;clip-path:none!important;transition:none!important}
+  .js .frame[data-rv="clip"] img{scale:1!important;clip-path:none!important}
+  .btn,.btn::before,.btn::after{transition:none!important;animation:none!important}
+}
