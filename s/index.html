@@ -10,14 +10,14 @@
 <link rel="icon" href="../assets/favicon-64.png" type="image/png">
 <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
 <link href="https://api.fontshare.com/v2/css?f[]=zodiak@400,700,401&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/fonts.css?v=9">
-<link rel="stylesheet" href="../assets/story.css?v=9">
+<link rel="stylesheet" href="../assets/fonts.css?v=10">
+<link rel="stylesheet" href="../assets/story.css?v=10">
 </head>
 <body>
 <div class="os" id="root"><div class="empty">…</div></div>
-<script src="../assets/config.js?v=9"></script>
-<script src="../assets/api.js?v=9"></script>
-<script src="../assets/render.js?v=9"></script>
+<script src="../assets/config.js?v=10"></script>
+<script src="../assets/api.js?v=10"></script>
+<script src="../assets/render.js?v=10"></script>
 <script>
 (function () {
   var R = window.OS_RENDER, API = window.OS_API, root = document.getElementById('root');
@@ -45,12 +45,15 @@
 
   /* 2) ديمو صفحة البيع */
   if (q.get('demo')) {
-    show(R.DEMO, 'story');
     /* ?shot=letter → قسم واحد بس، ظاهر على طول (للقطات صفحة البيع) */
     var shot = q.get('shot');
+    if (shot) { opts.noIntro = true; opts.still = true; }
+    else if (q.get('intro') === '0') opts.noIntro = true;
+    else if (q.get('auto')) opts.autoOpen = +q.get('auto') || 2400;
+    show(R.DEMO, 'full');
     if (shot) {
       document.body.classList.add('shot');
-      root.querySelectorAll('[data-s]').forEach(function (el) { if (el.getAttribute('data-s') !== shot) el.remove(); });
+      root.querySelectorAll('[data-s]').forEach(function (el) { if (shot.split(',').indexOf(el.getAttribute('data-s')) < 0) el.remove(); });
       root.querySelectorAll('.foot,.pv').forEach(function (el) { el.remove(); });
       root.querySelectorAll('.rv,.paperl p,.phone,.t').forEach(function (el) { el.classList.add('in'); });
     }
@@ -68,7 +71,7 @@
         return API.getPublic(slug, h).then(function (r2) {
           if (!r2 || r2.secret || !r2.data) return false;
           document.title = 'Our Story — ' + (r2.data.herEn || r2.data.her || '');
-          show(r2.data, r2.plan); scrollTo(0, 0); return true;
+          opts.noIntro = true; show(r2.data, r2.plan); scrollTo(0, 0); return true;
         });
       });
       return;

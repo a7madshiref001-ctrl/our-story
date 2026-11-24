@@ -17,8 +17,8 @@
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
 <link href="https://api.fontshare.com/v2/css?f[]=zodiak@400,700,401&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/fonts.css?v=9">
-<link rel="stylesheet" href="assets/ui.css?v=9">
+<link rel="stylesheet" href="assets/fonts.css?v=10">
+<link rel="stylesheet" href="assets/ui.css?v=10">
 <script>document.documentElement.classList.add('js')</script>
 <style>
 :root{--paper:#F7F2EA;--paper2:#EFE6DA;--rose:#BD5265;--ink:#302622;--blush:#EBD6D2;--taupe:#8C7C72;--line:#E2D6C8;--en:'Zodiak',Georgia,serif;--ar:'Estedad',system-ui,sans-serif}
@@ -99,13 +99,13 @@ header.top a.how{font-size:14px;font-weight:600;color:var(--ink)}
 .shot span{display:block;font-size:14.5px;color:var(--taupe);line-height:1.7}
 .shot .no{font-family:var(--en);font-style:italic;color:var(--rose);font-size:15px;display:block;direction:ltr;text-align:right;margin-top:16px}
 .shbar{height:2px;background:var(--line);margin-top:8px;position:relative;overflow:hidden;border-radius:2px}
-.shbar i{position:absolute;top:0;right:0;height:100%;width:34%;background:var(--ink);border-radius:2px;transition:transform .2s linear}
+.shbar i{position:absolute;top:0;right:0;height:100%;width:25%;background:var(--ink);border-radius:2px;transition:transform .2s linear}
 @media(min-width:900px){
   .shots{overflow:visible;justify-content:space-between;margin:56px 0 0;padding:0}
-  .shot{width:30%;max-width:none}
+  .shot{width:23%;max-width:none}
   .shot:nth-child(1) .dev{rotate:calc(4deg * (1 - var(--p)) + 2deg);translate:0 calc(40px * (1 - var(--p)))}
-  .shot:nth-child(2){margin-top:60px}
-  .shot:nth-child(3) .dev{rotate:calc(-4deg * (1 - var(--p)) - 2deg);translate:0 calc(40px * (1 - var(--p)))}
+  .shot:nth-child(2),.shot:nth-child(4){margin-top:60px}
+  .shot:nth-child(4) .dev{rotate:calc(-4deg * (1 - var(--p)) - 2deg);translate:0 calc(40px * (1 - var(--p)))}
   .shot:hover .dev{transform:translateY(-12px) rotate(0);box-shadow:0 46px 60px -34px rgba(48,38,34,.7)}
   .shbar{display:none}
 }
@@ -267,7 +267,7 @@ footer .meta a{color:var(--ink);font-weight:600}
     <div class="stage" id="stage">
       <div class="frame photo" data-rv="clip" style="--d:.15s"><img src="assets/img/hero-rose.jpg" alt="" width="896" height="1120" data-par=".05"></div>
       <div class="days" data-rv="pop" style="--d:1.1s"><b data-count="812" data-dur="2200">0</b><span>يوم من أول مرة</span></div>
-      <div class="phwrap" data-rv style="--d:.6s"><div class="phone" id="phone"><div class="scr" id="scr"><iframe src="s/?demo=1" title="مثال للهدية" loading="eager"></iframe></div></div></div>
+      <div class="phwrap" data-rv style="--d:.6s"><div class="phone" id="phone"><div class="scr" id="scr"><iframe src="s/?demo=1&auto=2600" title="مثال للهدية" loading="eager"></iframe></div></div></div>
       <div class="note" data-rv="fade" style="--d:1.3s">دي هدية حقيقية. جرّب تسحب جواها.</div>
     </div>
   </section>
@@ -282,9 +282,10 @@ footer .meta a{color:var(--ink);font-weight:600}
       <h2 class="h2" data-split>هي هتشوف إيه لما تفتح هديتك؟</h2>
     </div>
     <div class="shots" id="shots" data-scrub data-stagger=".14">
-      <figure class="shot" data-rv><div class="dev"><img src="assets/shots/gift-cover.jpg" alt="" loading="lazy" width="600" height="1266"></div><span class="no">01</span><b>الغلاف باسمها</b><span>أول حاجة تشوفها: اسمها وصورتكم.</span></figure>
-      <figure class="shot" data-rv><div class="dev"><img src="assets/shots/gift-memories.jpg" alt="" loading="lazy" width="600" height="1266"></div><span class="no">02</span><b>الذكريات والرسايل</b><span>أول رسالة بينكم، وصوركم وحكاية كل صورة.</span></figure>
-      <figure class="shot" data-rv><div class="dev"><img src="assets/shots/gift-letter.jpg" alt="" loading="lazy" width="600" height="1266"></div><span class="no">03</span><b>جوابك والأمنية الأخيرة</b><span>كلامك ليها، وفي الآخر أمنية تفتحها بإيدها.</span></figure>
+      <figure class="shot" data-rv><div class="dev"><img src="assets/shots/gift-intro.jpg" alt="" loading="lazy" width="600" height="1266"></div><span class="no">01</span><b>ظرف باسمها</b><span>أول ما تفتح اللينك: ظرف مقفول باسمها، تضغط عليه يتفتح.</span></figure>
+      <figure class="shot" data-rv><div class="dev"><img src="assets/shots/gift-reasons.jpg" alt="" loading="lazy" width="600" height="1266"></div><span class="no">02</span><b>حاجات بتحبها فيها</b><span>كروت تقلبها بإيدها، وكل كارت فيه حاجة بتحبها فيها.</span></figure>
+      <figure class="shot" data-rv><div class="dev"><img src="assets/shots/gift-letter.jpg" alt="" loading="lazy" width="600" height="1266"></div><span class="no">03</span><b>جوابك ليها</b><span>جواب مقفول تفتحه، وسطر سطر بيظهر قدامها.</span></figure>
+      <figure class="shot" data-rv><div class="dev"><img src="assets/shots/gift-openwhen.jpg" alt="" loading="lazy" width="600" height="1266"></div><span class="no">04</span><b>افتحيها لما...</b><span>جوابات لأوقات بعينها، وبعدها مفاجأة تمسحها بصباعها.</span></figure>
     </div>
     <div class="swipe"><span>اسحب</span><div class="shbar"><i id="shbar"></i></div></div>
   </div>
@@ -324,8 +325,10 @@ footer .meta a{color:var(--ink);font-weight:600}
     <div class="ex" data-stagger=".1">
       <div data-rv><span class="ix">01</span><b>خليها تسمع صوتك</b><span>فويس منك في آخر الصفحة، مش بس كلام مكتوب.</span><div class="wave" id="wave"></div></div>
       <div data-rv><span class="ix">02</span><b>تتفتح في ميعادها</b><span>ابعتها بدري، وهتفضل مقفولة لحد 12 بالليل يوم عيد ميلادها.</span><div class="flip" id="lk"></div></div>
-      <div data-rv><span class="ix">03</span><b>سؤال إجابته عندها</b><span>الصفحة ما بتتفتحش غير لما تجاوب صح.</span></div>
-      <div data-rv><span class="ix">04</span><b>لحد 20 صورة</b><span>مساحة لحكايتكم كلها، من أول يوم لحد النهارده.</span></div>
+      <div data-rv><span class="ix">03</span><b>جوابات «افتحيها لما»</b><span>لما تزعل، لما توحشها، لما تحتاج تضحك. كل جواب ليه وقته.</span></div>
+      <div data-rv><span class="ix">04</span><b>مفاجأة تمسحها</b><span>كارت تمسحه بصباعها، وتحته المفاجأة اللي جهزتها.</span></div>
+      <div data-rv><span class="ix">05</span><b>سؤال إجابته عندها</b><span>الصفحة ما بتتفتحش غير لما تجاوب صح.</span></div>
+      <div data-rv><span class="ix">06</span><b>لحد 20 صورة</b><span>مساحة لحكايتكم كلها، من أول يوم لحد النهارده.</span></div>
     </div>
   </div>
 </section>
@@ -389,10 +392,10 @@ footer .meta a{color:var(--ink);font-weight:600}
 </footer>
 <div class="sticky" id="sticky"><a class="btn block" href="start/" id="stickyBtn">اعمِل حكايتكم</a></div>
 
-<script src="assets/config.js?v=9"></script>
-<script src="assets/api.js?v=9"></script>
-<script src="assets/phrases.js?v=9"></script>
-<script src="assets/motion.js?v=9"></script>
+<script src="assets/config.js?v=10"></script>
+<script src="assets/api.js?v=10"></script>
+<script src="assets/phrases.js?v=10"></script>
+<script src="assets/motion.js?v=10"></script>
 <script>
 (function () {
   var CFG = OS_CONFIG, P = OS_PHRASES, UI = OSUI, $ = function (id) { return document.getElementById(id); };
@@ -422,7 +425,7 @@ footer .meta a{color:var(--ink);font-weight:600}
   var shots = $('shots');
   shots.addEventListener('scroll', function () {
     var max = shots.scrollWidth - shots.clientWidth; if (max <= 0) return;
-    var k = Math.abs(shots.scrollLeft) / max; $('shbar').style.transform = 'translateX(' + (-k * 194) + '%)';
+    var k = Math.abs(shots.scrollLeft) / max; $('shbar').style.transform = 'translateX(' + (-k * 300) + '%)';
   }, { passive: true });
 
   /* أساليب الجواب: مؤشر بيتحرك + الكلام بيتكتب */
@@ -485,14 +488,19 @@ footer .meta a{color:var(--ink);font-weight:600}
     ['الغلاف باسمها', 1, 1],
     ['الصور', 'لحد ' + CFG.plans.story.maxMoments, 'لحد ' + CFG.plans.full.maxMoments],
     ['أول رسالة بينكم', 1, 1],
+    ['ظرف باسمها تفتحه', 1, 1],
+    ['حاجات بحبها فيكي', 1, 1],
     ['الجواب والأمنية', 1, 1],
+    ['وعود ليها', 1, 1],
     ['عدّاد من أول يوم', 1, 1],
     ['لينك خاص وكارت QR', 1, 1],
+    ['جوابات «افتحيها لما»', 0, 1],
+    ['مفاجأة تمسحها', 0, 1],
     ['فويس بصوتك', 0, 1],
     ['تتقفل لحد ميعاد', 0, 1],
     ['سؤال سر', 0, 1]
   ];
-  var META = { story: ['الاختيار الأساسي', 'حكايتكم', 'الغلاف، والصور، والرسايل، والجواب، والـQR.'], full: ['تجربة أكمل', 'حكايتكم + التفاصيل', 'كل اللي في الأساسية، ومعاها الفويس والقفل والسؤال السر.'] };
+  var META = { story: ['الاختيار الأساسي', 'حكايتكم', 'الظرف، والصور، والرسايل، والكروت، والجواب، والوعود.'], full: ['تجربة أكمل', 'حكايتكم + التفاصيل', 'كل اللي في الأساسية، ومعاها جوابات «افتحيها لما» ومفاجأة تمسحها والفويس والقفل.'] };
   $('plans').innerHTML = ['story', 'full'].map(function (k, col) {
     var p = CFG.plans[k], m = META[k];
     return '<div class="plan' + (k === 'full' ? ' full' : '') + '" data-rv><span class="t">' + m[0] + '</span><h3>' + m[1] + '</h3><span class="d">' + m[2] + '</span>' +

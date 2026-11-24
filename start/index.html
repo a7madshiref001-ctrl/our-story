@@ -8,8 +8,8 @@
 <link rel="icon" href="../assets/favicon-64.png" type="image/png">
 <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
 <link href="https://api.fontshare.com/v2/css?f[]=zodiak@400,700,401&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/fonts.css?v=9">
-<link rel="stylesheet" href="../assets/ui.css?v=9">
+<link rel="stylesheet" href="../assets/fonts.css?v=10">
+<link rel="stylesheet" href="../assets/ui.css?v=10">
 <script>document.documentElement.classList.add("js")</script>
 <style>
 :root{--bg:#F7F2EA;--card:#FFFFFF;--ink:#302622;--soft:#8C7C72;--line:#E2D6C8;--acc:#BD5265;--acc2:#A54558;--tint:#EBD6D2;--ok:#4E7A4A;--en:'Zodiak',Georgia,serif;--ar:'Estedad',system-ui,sans-serif}
@@ -116,6 +116,18 @@ textarea.in{min-height:120px;resize:vertical;line-height:1.8}
 .tb.acc{color:var(--acc)}
 .tb:disabled{opacity:.4}
 
+.lst .li{display:flex;gap:8px;align-items:center;margin-bottom:8px;animation:in .45s var(--e-out)}
+.lst .ix{flex:none;width:26px;font-family:var(--en);font-style:italic;color:var(--acc);font-size:17px}
+.lst .in{padding:12px 13px}
+.lst .x,.owrow .x{border:0;background:none;color:var(--soft);font-size:20px;cursor:pointer;padding:4px 6px}
+.sug{margin-top:12px}
+.sug .hint{margin:0 0 6px}
+.sug .chips{gap:6px}
+.sug .chip{font-size:13px;padding:8px 12px;background:transparent;border-style:dashed}
+.owrow{border-top:1px solid rgba(48,38,34,.12);padding:12px 0}
+.owrow:first-child{border-top:0}
+.owrow .in{margin-bottom:6px}
+.owrow textarea.in{min-height:84px}
 .bub{display:flex;gap:8px;align-items:center;margin-bottom:8px}
 .bub .who{flex:none;border:1.5px solid #DDD0C1;background:#FFFDF8;border-radius:12px 12px 12px 4px;padding:12px 10px;font-size:13.5px;cursor:pointer;min-width:62px;transition:background-color .3s,color .3s}
 .bub .who.her{background:var(--acc);border-color:var(--acc);color:#fff}
@@ -211,19 +223,19 @@ textarea.in{min-height:120px;resize:vertical;line-height:1.8}
 <div class="bar"><div class="in2"><button class="pvbtn btn paper na" id="pvbtn" type="button">معاينة</button><button class="skip btn paper na" id="skip" hidden>تخطّي</button><button class="go btn" id="go">يلا</button></div></div>
 <div class="toast" id="toast"></div>
 
-<script src="../assets/config.js?v=9"></script>
-<script src="../assets/api.js?v=9"></script>
-<script src="../assets/phrases.js?v=9"></script>
-<script src="../assets/render.js?v=9"></script>
-<script src="../assets/img.js?v=9"></script>
-<script src="../assets/motion.js?v=9"></script>
+<script src="../assets/config.js?v=10"></script>
+<script src="../assets/api.js?v=10"></script>
+<script src="../assets/phrases.js?v=10"></script>
+<script src="../assets/render.js?v=10"></script>
+<script src="../assets/img.js?v=10"></script>
+<script src="../assets/motion.js?v=10"></script>
 <script>
 (function () {
   var CFG = OS_CONFIG, API = OS_API, P = OS_PHRASES, R = OS_RENDER;
   var $ = function (id) { return document.getElementById(id); };
   var esc = R.esc;
   var DAY = 864e5;
-  var S = { id: null, token: null, step: 0, plan: 'full', email: '', data: { theme: 'rose', moments: [], chat: { msgs: [] }, song: {}, lock: {}, secret: {} } };
+  var S = { id: null, token: null, step: 0, plan: 'full', email: '', data: { theme: 'rose', moments: [], chat: { msgs: [] }, song: {}, lock: {}, secret: {}, openWhen: {}, surprise: {} } };
   var D = S.data;
   var pending = 0;
 
@@ -233,6 +245,7 @@ textarea.in{min-height:120px;resize:vertical;line-height:1.8}
     { key: 'photos', title: 'صوركم', lead: 'اختارهم كلهم مرة واحدة.', btn: 'كمّل', jump: '.tl' },
     { key: 'chat', title: 'أول رسالة بينكم', lead: 'مش فاكرها؟ تخطّاها.', btn: 'كمّل', skip: true, jump: '.chat' },
     { key: 'letter', title: 'الجواب', lead: 'اختار أسلوب، وعدّل براحتك.', btn: 'كمّل', jump: '.paperl' },
+    { key: 'love', title: 'حاجات بتحبها فيها', lead: 'كل واحدة بتبقى كارت تقلبه بإيدها.', btn: 'كمّل', skip: true, jump: '.rgrid' },
     { key: 'touch', title: 'آخر لمسة', lead: '', btn: 'شوفها', jump: '.cover' },
     { key: 'pay', title: 'جاهزة', lead: 'اتفرج عليها، وبعدين ادفع.', btn: 'ادفع', jump: '.cover' }
   ];
@@ -246,7 +259,7 @@ textarea.in{min-height:120px;resize:vertical;line-height:1.8}
   function today() { var t = new Date(), p = function (n) { return (n < 10 ? '0' : '') + n; }; return t.getFullYear() + '-' + p(t.getMonth() + 1) + '-' + p(t.getDate()); }
   var tt; function toast(m) { var t = $('toast'); t.textContent = m; t.classList.add('show'); clearTimeout(tt); tt = setTimeout(function () { t.classList.remove('show'); }, 2600); }
   function maxMoments() { return CFG.plans.full.maxMoments; }
-  function usesFull() { return !!(D.voice || (D.lock && D.lock.on) || (D.secret && D.secret.on) || D.moments.length > CFG.plans.story.maxMoments); }
+  function usesFull() { return !!(D.voice || (D.lock && D.lock.on) || (D.secret && D.secret.on) || (D.openWhen && D.openWhen.on) || (D.surprise && D.surprise.on) || D.moments.length > CFG.plans.story.maxMoments); }
 
   /* ---------- save + preview ---------- */
   var saveT, pvT, pvReady = false;
@@ -314,6 +327,12 @@ textarea.in{min-height:120px;resize:vertical;line-height:1.8}
       '<div class="f"><label>الأمنية اللي في الآخر</label><div class="chips" id="wishes">' + P.wishes.map(function (w, i) { return '<button class="chip" data-i="' + i + '">' + esc(fill(w)).slice(0, 34) + '…</button>'; }).join('') + '</div>' +
       '<textarea class="in" id="fWish" style="min-height:70px;margin-top:8px">' + esc(D.wish || '') + '</textarea></div>';
   };
+  V.love = function () {
+    return '<div class="f"><label>حاجات بتحبها فيها <small>(لحد 12)</small></label><div class="lst" id="rList"></div><button class="tb acc" id="rAdd">+ حاجة كمان</button>' +
+      '<div class="sug"><div class="hint">اضغط على اقتراح يتضاف</div><div class="chips" id="rSug"></div></div></div>' +
+      '<div class="f" style="margin-top:26px"><label>وعود ليها <small>(لحد 8)</small></label><div class="lst" id="pList"></div><button class="tb acc" id="pAdd">+ وعد كمان</button>' +
+      '<div class="sug"><div class="hint">اضغط على اقتراح يتضاف</div><div class="chips" id="pSug"></div></div></div>';
+  };
   V.touch = function () {
     var themes = [['rose', 'وردي', '#B4545A', '#F2D9D2'], ['sage', 'زيتوني', '#5E7A55', '#DCE5D2'], ['lilac', 'ليلكي', '#7E5A9A', '#E6DAF0']];
     var lines = P.coverLines.filter(function (l) { return l.indexOf('{age}') < 0 || D.age; });
@@ -332,6 +351,11 @@ textarea.in{min-height:120px;resize:vertical;line-height:1.8}
         '<div class="sub" id="secBox" ' + (D.secret.on ? '' : 'hidden') + '><input class="in" id="fSecQ" maxlength="80" placeholder="أول خروجة كانت فين؟" value="' + esc(D.secret.q || '') + '">' +
           '<input class="in" id="fSecA" style="margin-top:8px" maxlength="40" placeholder="' + (D.secret.h ? 'الإجابة متسجلة. اكتبها تاني لو هتغيّرها' : 'الإجابة') + '">' +
           '<input class="in" id="fSecHint" style="margin-top:8px" maxlength="60" placeholder="تلميح بعد 3 محاولات غلط" value="' + esc(D.secret.hint || '') + '"></div>' +
+        '<div class="tog"><div><b>جوابات «افتحيها لما...»</b><div class="hint">جوابات صغيرة تفتحها في وقتها</div></div><button class="sw2' + (D.openWhen.on ? ' on' : '') + '" id="tOw" aria-label="جوابات"></button></div>' +
+        '<div class="sub" id="owBox" ' + (D.openWhen.on ? '' : 'hidden') + '></div>' +
+        '<div class="tog"><div><b>مفاجأة تمسحها</b><div class="hint">تمسح بصباعها وتعرف المفاجأة</div></div><button class="sw2' + (D.surprise.on ? ' on' : '') + '" id="tSur" aria-label="مفاجأة"></button></div>' +
+        '<div class="sub" id="surBox" ' + (D.surprise.on ? '' : 'hidden') + '><div class="chips" id="surQuick">' + P.surprises.map(function (t, i) { return '<button class="chip" data-i="' + i + '">' + esc(t) + '</button>'; }).join('') + '</div>' +
+          '<input class="in" id="fSur" style="margin-top:8px" maxlength="120" placeholder="اكتب المفاجأة" value="' + esc(D.surprise.t || '') + '"></div>' +
       '</div>';
   };
   /* الباقة الأساسية بعد الدفع: من غير صندوق المفاجآت (مش هيشتغل عندها) */
@@ -467,6 +491,22 @@ textarea.in{min-height:120px;resize:vertical;line-height:1.8}
   }
 
   /* ---------- bind per step ---------- */
+  /* قايمة تتعدّل: كل سطر input، واقتراحات بتتضاف بضغطة */
+  function listUI(k, max, boxId, addId, sugId, sugs, jump) {
+    function draw() {
+      $(boxId).innerHTML = D[k].map(function (t, i) { return '<div class="li" data-i="' + i + '"><span class="ix">' + (i < 9 ? '0' : '') + (i + 1) + '</span><input class="in" maxlength="90" value="' + esc(t) + '"><button class="x" aria-label="امسح">×</button></div>'; }).join('');
+      var left = sugs.filter(function (x) { return D[k].indexOf(x) < 0; });
+      $(sugId).innerHTML = left.slice(0, 6).map(function (x) { return '<button class="chip" data-t="' + esc(x) + '">+ ' + esc(x) + '</button>'; }).join('');
+      $(sugId).parentNode.hidden = !left.length || D[k].length >= max;
+      $(addId).hidden = D[k].length >= max;
+    }
+    draw();
+    $(boxId).addEventListener('input', function (e) { var r = e.target.closest('.li'); if (r) { D[k][+r.dataset.i] = e.target.value; changed({ jump: jump }); } });
+    $(boxId).addEventListener('click', function (e) { if (!e.target.classList.contains('x')) return; D[k].splice(+e.target.closest('.li').dataset.i, 1); draw(); changed({ jump: jump }); });
+    $(addId).addEventListener('click', function () { if (D[k].length >= max) return; D[k].push(''); draw(); var ins = $(boxId).querySelectorAll('input'); ins[ins.length - 1].focus(); });
+    $(sugId).addEventListener('click', function (e) { var b = e.target.closest('.chip'); if (!b || D[k].length >= max) return; D[k].push(b.dataset.t); draw(); changed({ jump: jump }); });
+  }
+
   function bind(key) {
     var on = function (id, ev, fn) { var el = $(id); if (el) el.addEventListener(ev, fn); };
     if (key === 'when') {
@@ -544,6 +584,35 @@ textarea.in{min-height:120px;resize:vertical;line-height:1.8}
       on('fSecA', 'input', function () { var v = this.value; if (!v.trim()) return; R.hashAnswer(v).then(function (h) { D.secret.h = h; changed(); }); });
       on('fSecHint', 'input', function () { D.secret.hint = this.value; changed(); });
     }
+    if (key === 'love') {
+      if (!D.reasons) D.reasons = P.reasons.slice(0, 6);
+      if (!D.promises) D.promises = P.promises.slice(0, 3);
+      listUI('reasons', 12, 'rList', 'rAdd', 'rSug', P.reasons, '.rgrid');
+      listUI('promises', 8, 'pList', 'pAdd', 'pSug', P.promises, '.pl');
+      changed({ jump: '.rgrid' });
+    }
+    if (key === 'touch' && $('tOw')) {
+      var drawOw = function () {
+        $('owBox').innerHTML = (D.openWhen.notes || []).map(function (n, i) {
+          return '<div class="owrow" data-i="' + i + '"><input class="in" data-k="w" maxlength="40" value="' + esc(n.w) + '" placeholder="افتحيها لما..."><textarea class="in" data-k="t" maxlength="400" placeholder="الكلام">' + esc(n.t) + '</textarea></div>';
+        }).join('');
+      };
+      if (D.openWhen.on && !(D.openWhen.notes || []).length) D.openWhen.notes = P.openWhen.map(function (n) { return { w: n.w, t: fill(n.t) }; });
+      if (D.openWhen.on) drawOw();
+      on('tOw', 'click', function () {
+        D.openWhen.on = !D.openWhen.on; this.classList.toggle('on', D.openWhen.on); $('owBox').hidden = !D.openWhen.on;
+        if (D.openWhen.on && !(D.openWhen.notes || []).length) D.openWhen.notes = P.openWhen.map(function (n) { return { w: n.w, t: fill(n.t) }; });
+        if (D.openWhen.on) drawOw(); changed({ jump: '.owg' });
+      });
+      $('owBox').addEventListener('input', function (e) { var r = e.target.closest('.owrow'); if (!r) return; D.openWhen.notes[+r.dataset.i][e.target.dataset.k] = e.target.value; changed({ jump: '.owg' }); });
+      on('tSur', 'click', function () {
+        D.surprise.on = !D.surprise.on; this.classList.toggle('on', D.surprise.on); $('surBox').hidden = !D.surprise.on;
+        if (D.surprise.on && !D.surprise.t) { D.surprise.t = P.surprises[0]; $('fSur').value = D.surprise.t; }
+        changed({ jump: '.scr' });
+      });
+      on('surQuick', 'click', function (e) { var b = e.target.closest('.chip'); if (!b) return; D.surprise.t = P.surprises[+b.dataset.i]; $('fSur').value = D.surprise.t; changed({ jump: '.scr' }); });
+      on('fSur', 'input', function () { D.surprise.t = this.value; changed({ jump: '.scr' }); });
+    }
     if (key === 'saved') on('seeAll', 'click', function () { $('pvwrap').classList.add('open'); sendPreview('.cover'); });
     if (key === 'pay') {
       $('plans').addEventListener('click', function (e) {
@@ -575,7 +644,10 @@ textarea.in{min-height:120px;resize:vertical;line-height:1.8}
       if (!D.moments.length) { toast('ارفع صورة واحدة على الأقل'); return false; }
       return true;
     }
+    if (key === 'love') { D.reasons = (D.reasons || []).filter(function (t) { return t.trim(); }); D.promises = (D.promises || []).filter(function (t) { return t.trim(); }); return true; }
     if (key === 'touch') {
+      if (D.openWhen.on && D.openWhen.notes) D.openWhen.notes = D.openWhen.notes.filter(function (n) { return n.w.trim() && n.t.trim(); });
+      if (D.surprise.on && !String(D.surprise.t || '').trim()) { toast('اكتب المفاجأة، أو اقفلها'); return false; }
       if (pending) { toast('استنى ثانية، الفويس لسه بيترفع'); return false; }
       if (D.lock.on && (!D.lock.at || (!S.paid && new Date(D.lock.at) <= new Date()))) { toast('اختار ميعاد القفل (لازم يكون جاي)'); return false; }
       if (D.secret.on && (!D.secret.q || !D.secret.h)) { toast('اكتب السؤال والإجابة، أو اقفل السؤال السر'); return false; }
@@ -634,7 +706,7 @@ textarea.in{min-height:120px;resize:vertical;line-height:1.8}
       .catch(function (e) { toast('الدفع ما اتفتحش، جرّب تاني'); updateBtn(); });
   }
   $('go').onclick = next;
-  $('skip').onclick = function () { if (STEPS[S.step].key === 'chat') D.chat.msgs = D.chat.msgs.filter(function (m) { return m.t.trim(); }); changed(); show(S.step + 1); };
+  $('skip').onclick = function () { if (STEPS[S.step].key === 'chat') D.chat.msgs = D.chat.msgs.filter(function (m) { return m.t.trim(); }); if (STEPS[S.step].key === 'love') { D.reasons = []; D.promises = []; } changed(); show(S.step + 1); };
   $('back').onclick = function () { if (S.step > 0) show(S.step - 1); };
   addEventListener('beforeunload', function (e) { if (pending) { e.preventDefault(); e.returnValue = ''; } });
 
@@ -647,7 +719,7 @@ textarea.in{min-height:120px;resize:vertical;line-height:1.8}
       if (r.status === 'paid' && !/[?&]edit=1/.test(location.search)) { location.replace('../done/?id=' + encodeURIComponent(ss.id)); return; }
       S.paid = r.status === 'paid';
       Object.assign(D, r.data || {});
-      D.moments = D.moments || []; D.chat = D.chat || { msgs: [] }; D.chat.msgs = D.chat.msgs || []; D.song = D.song || {}; D.lock = D.lock || {}; D.secret = D.secret || {};
+      D.moments = D.moments || []; D.chat = D.chat || { msgs: [] }; D.chat.msgs = D.chat.msgs || []; D.song = D.song || {}; D.lock = D.lock || {}; D.secret = D.secret || {}; D.openWhen = D.openWhen || {}; D.surprise = D.surprise || {};
       if (r.plan) S.plan = r.plan; if (!S.paid && ss.plan && CFG.plans[ss.plan]) S.plan = ss.plan; S.email = r.email || '';
       if (S.paid) { STEPS[STEPS.length - 1] = { key: 'saved', title: 'اتحفظ', lead: 'التعديل ظاهر على نفس اللينك.', btn: 'رجوع للينك', jump: '.cover' }; show(1); toast('أي تعديل هيظهر على نفس اللينك'); return; }
       show(Math.min(Math.max(ss.step || 1, 1), STEPS.length - 1));
